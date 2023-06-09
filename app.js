@@ -83,6 +83,18 @@ function draw() {
     y: snakeY,
   };
 
+
+  //穿牆設定
+  if (snake[0].x === 0 && d === "left"){
+    newHead.x = (column - 1) * unit;
+  } else if(snake[0].x === (column - 1) * unit && d === "right") {
+    newHead.x = 0;
+  } else if (snake[0].y === 0 && d === "up") {
+    newHead.y = (row - 1) * unit;
+  } else if (snake[0].y === (row - 1) * unit && d === "down") {
+    newHead.y = 0;
+  }
+
   //在頭部增加一個新的方塊並且去掉尾部方塊來讓蛇移動
   snake.unshift(newHead); // 增加方塊到頭部
 
