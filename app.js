@@ -30,15 +30,27 @@ snake[3] = {
   y: 0,
 };
 
-let d = "right";
+window.addEventListener("keydown", changeDirection);
 
+let d = "right";
+function changeDirection(e) {
+  if (e.key === "ArrowRight" && d !== "left") {
+    d = "right";
+  } else if (e.key === "ArrowLeft" && d !== "right") {
+    d = "left";
+  } else if (e.key === "ArrowUp" && d !== "down") {
+    d = "up";
+  } else if (e.key === "ArrowDown" && d !== "up") {
+    d = "down";
+  }
+}
 
 function draw() {
   //先將背景全部重新塗黑
   ctx.fillStyle = "black";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
- //畫出蛇
+  //畫出蛇
   for (let i = 0; i < snake.length; i++) {
     // 設定內容顏色
     if (i == 0) {
@@ -53,11 +65,10 @@ function draw() {
     ctx.strokeRect(snake[i].x, snake[i].y, unit, unit); // 外框繪製
   }
 
-
   //以目前d的方向來決定蛇的下一瞬間要放在哪個座標
   let snakeX = snake[0].x;
   let snakeY = snake[0].y;
-  if( d === "left") {
+  if (d === "left") {
     snakeX -= unit;
   } else if (d === "right") {
     snakeX += unit;
@@ -69,7 +80,7 @@ function draw() {
 
   let newHead = {
     x: snakeX,
-    y: snakeY
+    y: snakeY,
   };
 
   //在頭部增加一個新的方塊並且去掉尾部方塊來讓蛇移動
@@ -79,4 +90,4 @@ function draw() {
   snake.pop(); // 去掉尾部
 }
 
-let myGame = setInterval(draw,100);
+let myGame = setInterval(draw, 100);
