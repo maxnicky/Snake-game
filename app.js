@@ -30,6 +30,50 @@ snake[3] = {
   y: 0,
 };
 
+
+
+class Fruit {
+  constructor() {
+    this.x = Math.floor(Math.random() * column) * unit;
+    this.y = Math.floor(Math.random() * row) * unit;
+  }
+
+  drawFruit() {
+    ctx.fillStyle = "yellow";
+    ctx.fillRect(this.x, this.y, unit, unit);
+  }
+
+  pickALocation() {
+    //新位置不能跟蛇重疊
+    let overlapping = false;
+    let new_x;
+    let new_y;
+
+    function check() {
+      for (let i = 0; i < snake.length; i++) {
+        if (new_x === snake[i].x && new_y === snake[i].y) {          
+          overlapping = true;
+          return;
+        } else {
+          overlapping = false;
+        }
+      }
+    }
+
+    do {
+      new_x = Math.floor(Math.random() * column) * unit;
+      new_y = Math.floor(Math.random() * row) * unit;      
+      check();
+    } while (overlapping)
+
+    this.x = new_x;
+    this.y = new_y;
+
+  }
+}
+
+let myFruit = new Fruit();
+
 window.addEventListener("keydown", changeDirection);
 
 let d = "right";
@@ -49,6 +93,8 @@ function draw() {
   //先將背景全部重新塗黑
   ctx.fillStyle = "black";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  myFruit.drawFruit();
 
   //畫出蛇
   for (let i = 0; i < snake.length; i++) {
@@ -84,7 +130,7 @@ function draw() {
   };
 
 
-  //穿牆設定
+  //穿牆設定--新的頭部方塊座標出現在牆的另一邊
   if (snake[0].x === 0 && d === "left"){
     newHead.x = (column - 1) * unit;
   } else if(snake[0].x === (column - 1) * unit && d === "right") {
@@ -98,8 +144,16 @@ function draw() {
   //在頭部增加一個新的方塊並且去掉尾部方塊來讓蛇移動
   snake.unshift(newHead); // 增加方塊到頭部
 
-  //確認蛇是否吃到方塊，有吃到就不pop尾部
-  snake.pop(); // 去掉尾部
+  //確認蛇是否吃到果實，有吃到就不pop尾部
+  if(snake[0].x === myFruit.x && snake[0].y === myFruit.y) {
+    // 重新定位果實的隨機位置
+    myFruit.pickALocation();
+    
+    // 更新分數
+  } else {
+    snake.pop(); // 去掉尾部
+  }
+  
 }
 
 let myGame = setInterval(draw, 100);
