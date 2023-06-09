@@ -10,27 +10,27 @@ const row = canvas.height / unit; // 16
 const column = canvas.width / unit; // 16
 let snake = []; //array內每個元素都是物件，物件內存放身體的x, y座標 canvas左上角座標(0,0)，x越往右越大，y越往下越大
 
-snake[0] = {
-  x: 80,
-  y: 0,
-};
+function createSnake() {
+  snake[0] = {
+    x: 80,
+    y: 0,
+  };
 
-snake[1] = {
-  x: 60,
-  y: 0,
-};
+  snake[1] = {
+    x: 60,
+    y: 0,
+  };
 
-snake[2] = {
-  x: 40,
-  y: 0,
-};
+  snake[2] = {
+    x: 40,
+    y: 0,
+  };
 
-snake[3] = {
-  x: 20,
-  y: 0,
-};
-
-
+  snake[3] = {
+    x: 20,
+    y: 0,
+  };
+}
 
 class Fruit {
   constructor() {
@@ -51,7 +51,7 @@ class Fruit {
 
     function check() {
       for (let i = 0; i < snake.length; i++) {
-        if (new_x === snake[i].x && new_y === snake[i].y) {          
+        if (new_x === snake[i].x && new_y === snake[i].y) {
           overlapping = true;
           return;
         } else {
@@ -62,34 +62,49 @@ class Fruit {
 
     do {
       new_x = Math.floor(Math.random() * column) * unit;
-      new_y = Math.floor(Math.random() * row) * unit;      
+      new_y = Math.floor(Math.random() * row) * unit;
       check();
-    } while (overlapping)
+    } while (overlapping);
 
     this.x = new_x;
     this.y = new_y;
-
   }
 }
 
+// 初始設定
+createSnake();
 let myFruit = new Fruit();
 
 window.addEventListener("keydown", changeDirection);
 
 let d = "right";
 function changeDirection(e) {
+  //每次按下上下左右鍵之後，在下一幀被畫出來之前不接受任何keydown事件，防止按鍵速度太快導致蛇自殺
   if (e.key === "ArrowRight" && d !== "left") {
     d = "right";
+    window.removeEventListener("keydown", changeDirection);
   } else if (e.key === "ArrowLeft" && d !== "right") {
     d = "left";
+    window.removeEventListener("keydown", changeDirection);
   } else if (e.key === "ArrowUp" && d !== "down") {
     d = "up";
+    window.removeEventListener("keydown", changeDirection);
   } else if (e.key === "ArrowDown" && d !== "up") {
     d = "down";
-  }
+    window.removeEventListener("keydown", changeDirection);
+  } 
 }
 
 function draw() {
+  //畫圖前先確認蛇的頭部有沒有觸碰到自己
+  for (i = 1; i < snake.length; i++) {
+    if(snake[i].x === snake[0].x && snake[i].y === snake[0].y) {
+      clearInterval(myGame);
+      alert("遊戲結束");
+      return;
+    }
+  }
+
   //先將背景全部重新塗黑
   ctx.fillStyle = "black";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -129,11 +144,10 @@ function draw() {
     y: snakeY,
   };
 
-
   //穿牆設定--新的頭部方塊座標出現在牆的另一邊
-  if (snake[0].x === 0 && d === "left"){
+  if (snake[0].x === 0 && d === "left") {
     newHead.x = (column - 1) * unit;
-  } else if(snake[0].x === (column - 1) * unit && d === "right") {
+  } else if (snake[0].x === (column - 1) * unit && d === "right") {
     newHead.x = 0;
   } else if (snake[0].y === 0 && d === "up") {
     newHead.y = (row - 1) * unit;
@@ -145,15 +159,17 @@ function draw() {
   snake.unshift(newHead); // 增加方塊到頭部
 
   //確認蛇是否吃到果實，有吃到就不pop尾部
-  if(snake[0].x === myFruit.x && snake[0].y === myFruit.y) {
+  if (snake[0].x === myFruit.x && snake[0].y === myFruit.y) {
     // 重新定位果實的隨機位置
     myFruit.pickALocation();
-    
+
     // 更新分數
   } else {
     snake.pop(); // 去掉尾部
   }
-  
+
+  //確認蛇後續座標後重新添加監聽事件
+  window.addEventListener("keydown", changeDirection);
 }
 
 let myGame = setInterval(draw, 100);
