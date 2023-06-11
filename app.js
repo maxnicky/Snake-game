@@ -193,9 +193,7 @@ let myGame = setInterval(draw, 100);
 
 function loadHightestScore() { 
   if (score > hightestScore) {
-    localStorage.setItem("hightestScore", `${score}`);
-    hightestScore = Number(localStorage.getItem("hightestScore"));
-    document.getElementById("myScore2").innerHTML = "最高分數：" + hightestScore;
+    localStorage.setItem("hightestScore", `${score}`);    
   }  
 }
 
