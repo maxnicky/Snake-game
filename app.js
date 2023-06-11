@@ -95,12 +95,22 @@ function changeDirection(e) {
   } 
 }
 
+let score = 0;
+if (!(Number(localStorage.getItem("hightestScore")) > 0)) {
+  localStorage.setItem("hightestScore", "0");
+}
+let hightestScore = Number(localStorage.getItem("hightestScore"));
+document.getElementById("myScore").innerHTML = "遊戲分數：" + score;
+document.getElementById("myScore2").innerHTML = "最高分數：" + hightestScore;
+
+
 function draw() {
   //畫圖前先確認蛇的頭部有沒有觸碰到自己
   for (i = 1; i < snake.length; i++) {
     if(snake[i].x === snake[0].x && snake[i].y === snake[0].y) {
       clearInterval(myGame);
-      alert("遊戲結束");
+      loadHightestScore();
+      alert("遊戲結束");      
       return;
     }
   }
@@ -164,6 +174,8 @@ function draw() {
     myFruit.pickALocation();
 
     // 更新分數
+    score++;
+    document.getElementById("myScore").innerHTML = "遊戲分數：" + score;
   } else {
     snake.pop(); // 去掉尾部
   }
@@ -173,3 +185,14 @@ function draw() {
 }
 
 let myGame = setInterval(draw, 100);
+
+
+
+function loadHightestScore() { 
+  if (score > hightestScore) {
+    localStorage.setItem("hightestScore", `${score}`);
+    hightestScore = Number(localStorage.getItem("hightestScore"));
+    document.getElementById("myScore2").innerHTML = "最高分數：" + hightestScore;
+  }  
+}
+

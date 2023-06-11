@@ -13,7 +13,7 @@ body {
         #myCanvas {
             border: 5px solid lightgreen;
             position: absolute;
-            top: 60%;
+            top: 68%;
             left: 50%; //距離左邊半個畫面
             transform: translate(-50%,-50%);//向(x,y)移動自身一半長度
         }
@@ -25,12 +25,17 @@ body {
             font-size: 1.5rem;
             padding: 10px;
         }
+        #myScore2 {
+            transform: translateY(-2rem);
+        }
+
         #Start{
             padding: 0.5rem 0.25rem;
             background-color: yellow;
             font-size: 1.15rem;
             display: block;
-            margin: 15px;
+            margin: 10px;
+            transform: translateY(-1.5rem);
         }
     }
 }

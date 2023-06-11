@@ -15,7 +15,7 @@ body .App {
 body .App #myCanvas {
   border: 5px solid lightgreen;
   position: absolute;
-  top: 60%;
+  top: 68%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
@@ -27,10 +27,14 @@ body .App #myScore, body .App #myScore2 {
   font-size: 1.5rem;
   padding: 10px;
 }
+body .App #myScore2 {
+  transform: translateY(-2rem);
+}
 body .App #Start {
   padding: 0.5rem 0.25rem;
   background-color: yellow;
   font-size: 1.15rem;
   display: block;
-  margin: 15px;
+  margin: 10px;
+  transform: translateY(-1.5rem);
 }/*# sourceMappingURL=style.css.map */
