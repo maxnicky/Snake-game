@@ -176,6 +176,9 @@ function draw() {
     // 更新分數
     score++;
     document.getElementById("myScore").innerHTML = "遊戲分數：" + score;
+    if (score > hightestScore ) {
+      document.getElementById("myScore2").innerHTML = "最高分數：" + score;
+    }
   } else {
     snake.pop(); // 去掉尾部
   }
@@ -195,4 +198,5 @@ function loadHightestScore() {
     document.getElementById("myScore2").innerHTML = "最高分數：" + hightestScore;
   }  
 }
+
 
